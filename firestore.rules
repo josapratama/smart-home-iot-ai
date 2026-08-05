@@ -1,0 +1,65 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Users — baca/tulis data sendiri
+    match /users/{userId} {
+      allow read, write: if request.auth != null
+        && request.auth.uid == userId;
+    }
+
+    // Homes
+    match /homes/{homeId} {
+      // Siapa saja yang login bisa baca (untuk cek homeExists saat join)
+      allow read: if request.auth != null;
+
+      // Siapa saja yang login bisa buat rumah baru
+      allow create: if request.auth != null;
+
+      // Update: member atau siapa saja yang login (untuk join)
+      allow update: if request.auth != null;
+
+      // Devices & Channels
+      match /devices/{deviceId} {
+        allow read, write: if request.auth != null;
+
+        match /channels/{channelId} {
+          allow read, write: if request.auth != null;
+        }
+      }
+    }
+
+    // Sensor readings
+    match /sensor_readings/{docId} {
+      allow read, create: if request.auth != null;
+    }
+
+    // Commands
+    match /commands/{docId} {
+      allow read, create, update: if request.auth != null;
+    }
+
+    // Alarm events
+    match /alarm_events/{docId} {
+      allow read, create, update: if request.auth != null;
+    }
+
+    // Energy predictions
+    match /energy_predictions/{docId} {
+      allow read: if request.auth != null;
+      allow write: if false;
+    }
+
+    // Anomaly results
+    match /anomaly_results/{docId} {
+      allow read: if request.auth != null;
+      allow write: if false;
+    }
+
+    // Notifications
+    match /notifications/{docId} {
+      allow read: if request.auth != null;
+      allow write: if false;
+    }
+  }
+}

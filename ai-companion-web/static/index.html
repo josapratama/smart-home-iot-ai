@@ -1,0 +1,465 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Companion - Smart Home</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    <div class="app">
+      <!-- Sidebar -->
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+          <div class="avatar" id="avatar">🤖</div>
+          <h2 id="companion-name">Aria</h2>
+          <span class="mood-badge" id="mood-badge">🙂 neutral</span>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-section">
+          <h3>Status</h3>
+          <div class="stat-bar">
+            <label>Affection</label>
+            <div class="progress-bar">
+              <div
+                class="progress-fill affection"
+                id="affection-bar"
+                style="width: 70%"
+              ></div>
+            </div>
+            <span id="affection-val">70</span>
+          </div>
+          <div class="stat-bar">
+            <label>Patience</label>
+            <div class="progress-bar">
+              <div
+                class="progress-fill patience"
+                id="patience-bar"
+                style="width: 80%"
+              ></div>
+            </div>
+            <span id="patience-val">80</span>
+          </div>
+        </div>
+
+        <!-- Settings -->
+        <div class="settings-section">
+          <h3>Settings</h3>
+          <div class="setting-item">
+            <label>Mode</label>
+            <select id="mode-select">
+              <option value="pacar">💕 Pacar</option>
+              <option value="teman">🤝 Teman</option>
+            </select>
+          </div>
+          <div class="setting-item">
+            <label>Provider</label>
+            <select id="provider-select">
+              <option value="openai">🟢 OpenAI</option>
+              <option value="claude">🟠 Claude</option>
+              <option value="groq">⚡ Groq</option>
+              <option value="gemini">🔵 Gemini</option>
+              <option value="ollama">🏠 Ollama</option>
+            </select>
+          </div>
+          <div class="provider-info">
+            <span class="provider-model" id="provider-model"
+              >gemini-2.0-flash</span
+            >
+            <span class="provider-vision" id="provider-vision">👁️ Vision</span>
+          </div>
+          <div class="setting-item">
+            <button class="toggle-btn" id="camera-toggle">📷 OFF</button>
+            <button class="toggle-btn" id="voice-toggle">🔊 ON</button>
+            <button class="toggle-btn" id="handsfree-btn">🙌 OFF</button>
+          </div>
+        </div>
+
+        <!-- Smart Home -->
+        <div class="smart-home-section">
+          <h3>Smart Home</h3>
+          <div class="relay-grid">
+            <div class="relay-item" data-target="kamar tidur">
+              <span class="relay-icon">🌙</span>
+              <span>Kamar Tidur</span>
+            </div>
+            <div class="relay-item" data-target="ruang tamu">
+              <span class="relay-icon">🌙</span>
+              <span>Ruang Tamu</span>
+            </div>
+            <div class="relay-item" data-target="kamar mandi">
+              <span class="relay-icon">🌙</span>
+              <span>Kamar Mandi</span>
+            </div>
+            <div class="relay-item" data-target="dapur">
+              <span class="relay-icon">🌙</span>
+              <span>Dapur</span>
+            </div>
+          </div>
+          <!-- Scenes -->
+          <div class="scenes-row" id="scenes-row">
+            <button class="scene-btn" data-scene="sleep" title="Sleep Mode">
+              🌙
+            </button>
+            <button class="scene-btn" data-scene="welcome" title="Welcome Home">
+              🏠
+            </button>
+            <button class="scene-btn" data-scene="movie" title="Movie Mode">
+              🎬
+            </button>
+            <button class="scene-btn" data-scene="cooking" title="Cooking Mode">
+              🍳
+            </button>
+          </div>
+        </div>
+
+        <!-- Sidebar Tabs -->
+        <div class="sidebar-tabs">
+          <button class="tab-btn active" data-tab="chat-tab">💬</button>
+          <button class="tab-btn" data-tab="sensor-tab">📊</button>
+          <button class="tab-btn" data-tab="automation-tab">⚙️</button>
+          <button class="tab-btn" data-tab="mood-tab">💖</button>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <!-- Camera Container (hidden by default) -->
+        <div
+          class="camera-container"
+          id="camera-container"
+          style="display: none"
+        >
+          <video id="camera-video" autoplay playsinline muted></video>
+          <canvas id="camera-canvas" style="display: none"></canvas>
+          <span class="camera-label">📹 Live</span>
+        </div>
+
+        <!-- Tab: Chat -->
+        <div class="tab-content active" id="chat-tab">
+          <div class="chat-messages" id="chat-messages"></div>
+          <div class="chat-input-area">
+            <div class="input-container">
+              <button class="input-btn" id="mic-btn" title="Voice Input">
+                🎤
+              </button>
+              <button
+                class="input-btn"
+                id="image-upload-btn"
+                title="Upload Image"
+              >
+                🖼️
+              </button>
+              <input
+                type="file"
+                id="image-file-input"
+                accept="image/*"
+                style="display: none"
+              />
+              <input
+                type="text"
+                id="chat-input"
+                placeholder="Ketik pesan..."
+                autocomplete="off"
+              />
+              <button
+                class="input-btn"
+                id="camera-snap-btn"
+                title="Kirim dengan foto"
+                style="display: none"
+              >
+                📸
+              </button>
+              <button class="send-btn" id="send-btn">➤</button>
+            </div>
+            <div class="input-hint">
+              Enter untuk kirim • 🎤 untuk voice • 📸 kirim + foto kamera
+            </div>
+            <!-- Quick Replies -->
+            <div class="quick-replies" id="quick-replies">
+              <button class="quick-reply-btn" data-msg="Apa kabar?">
+                👋 Apa kabar?
+              </button>
+              <button
+                class="quick-reply-btn"
+                data-msg="Ceritakan sesuatu yang menarik"
+              >
+                💡 Cerita dong
+              </button>
+              <button class="quick-reply-btn" data-msg="Nyalakan semua lampu">
+                💡 Lampu ON
+              </button>
+              <button class="quick-reply-btn" data-msg="Matikan semua lampu">
+                🌙 Lampu OFF
+              </button>
+              <button
+                class="quick-reply-btn"
+                data-msg="Bagaimana kondisi rumah sekarang?"
+              >
+                🏠 Status rumah
+              </button>
+              <button
+                class="quick-reply-btn"
+                data-msg="Ayo main tebak-tebakan!"
+              >
+                🎮 Main game
+              </button>
+              <button class="quick-reply-btn" id="export-chat-btn">
+                💾 Export
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab: Sensor Dashboard -->
+        <div class="tab-content" id="sensor-tab">
+          <div class="sensor-dashboard">
+            <h2>📊 Sensor Dashboard</h2>
+            <div class="sensor-grid" id="sensor-grid">
+              <div class="sensor-card" id="sensor-energy">
+                <div class="sensor-icon">⚡</div>
+                <div class="sensor-label">Power</div>
+                <div class="sensor-value" id="sensor-power-val">-- W</div>
+                <div class="sensor-sub" id="sensor-voltage-val">
+                  -- V / -- A
+                </div>
+              </div>
+              <div class="sensor-card" id="sensor-gas">
+                <div class="sensor-icon">💨</div>
+                <div class="sensor-label">Gas</div>
+                <div class="sensor-value" id="sensor-gas-val">-- PPM</div>
+                <div class="sensor-sub" id="sensor-gas-status">Normal</div>
+              </div>
+              <div class="sensor-card" id="sensor-fire">
+                <div class="sensor-icon">🔥</div>
+                <div class="sensor-label">Fire</div>
+                <div class="sensor-value" id="sensor-fire-val">Aman</div>
+                <div class="sensor-sub">Flame Sensor</div>
+              </div>
+              <div class="sensor-card" id="sensor-alarm">
+                <div class="sensor-icon">🚨</div>
+                <div class="sensor-label">Alarms</div>
+                <div class="sensor-value" id="sensor-alarm-val">0</div>
+                <div class="sensor-sub" id="sensor-alarm-status">
+                  Tidak ada alarm
+                </div>
+              </div>
+            </div>
+            <!-- Energy Chart -->
+            <div class="energy-chart-section">
+              <h3>Penggunaan Energi Hari Ini</h3>
+              <div class="energy-stats" id="energy-stats">
+                <div class="energy-stat">
+                  <span class="energy-stat-label">Rata-rata</span>
+                  <span class="energy-stat-value" id="energy-avg">-- W</span>
+                </div>
+                <div class="energy-stat">
+                  <span class="energy-stat-label">Maksimum</span>
+                  <span class="energy-stat-value" id="energy-max">-- W</span>
+                </div>
+                <div class="energy-stat">
+                  <span class="energy-stat-label">Readings</span>
+                  <span class="energy-stat-value" id="energy-count">0</span>
+                </div>
+              </div>
+            </div>
+            <!-- Notifications -->
+            <div class="notifications-section">
+              <div class="notifications-header">
+                <h3>🔔 Notifikasi Otomasi</h3>
+                <button class="clear-notif-btn" id="clear-notif-btn">
+                  Hapus Semua
+                </button>
+              </div>
+              <div class="notifications-list" id="notifications-list">
+                <p class="empty-state">Tidak ada notifikasi</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab: Automation Rules -->
+        <div class="tab-content" id="automation-tab">
+          <div class="automation-page">
+            <h2>⚙️ Automation Rules</h2>
+            <p class="automation-desc">
+              Atur aksi otomatis berdasarkan kondisi sensor.
+            </p>
+
+            <!-- Add Rule Form -->
+            <div class="add-rule-form">
+              <h3>Tambah Rule Baru</h3>
+              <div class="form-row">
+                <input
+                  type="text"
+                  id="rule-name"
+                  placeholder="Nama rule"
+                  class="form-input"
+                />
+              </div>
+              <div class="form-row">
+                <select id="rule-sensor" class="form-select">
+                  <option value="gas_ppm">Gas (PPM)</option>
+                  <option value="power">Power (W)</option>
+                  <option value="voltage">Voltage (V)</option>
+                  <option value="current">Current (A)</option>
+                  <option value="fire">Fire Detected</option>
+                </select>
+                <select id="rule-operator" class="form-select">
+                  <option value=">">&gt;</option>
+                  <option value="<">&lt;</option>
+                  <option value=">=">&gt;=</option>
+                  <option value="<=">&lt;=</option>
+                  <option value="==">==</option>
+                </select>
+                <input
+                  type="number"
+                  id="rule-threshold"
+                  placeholder="Threshold"
+                  class="form-input form-input-sm"
+                />
+              </div>
+              <div class="form-row">
+                <select id="rule-action-target" class="form-select">
+                  <option value="">Tanpa aksi (notif saja)</option>
+                  <option value="kamar tidur">Kamar Tidur</option>
+                  <option value="ruang tamu">Ruang Tamu</option>
+                  <option value="kamar mandi">Kamar Mandi</option>
+                  <option value="dapur">Dapur</option>
+                  <option value="all">Semua Lampu</option>
+                </select>
+                <select id="rule-action-state" class="form-select">
+                  <option value="off">Matikan</option>
+                  <option value="on">Nyalakan</option>
+                </select>
+                <input
+                  type="number"
+                  id="rule-cooldown"
+                  placeholder="Cooldown (menit)"
+                  value="5"
+                  class="form-input form-input-sm"
+                />
+              </div>
+              <button class="add-rule-btn" id="add-rule-btn">
+                + Tambah Rule
+              </button>
+            </div>
+
+            <!-- Rules List -->
+            <div class="rules-list" id="rules-list">
+              <p class="empty-state">Loading rules...</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab: Mood History -->
+        <div class="tab-content" id="mood-tab">
+          <div class="mood-page">
+            <h2>💖 Mood & Relationship</h2>
+            <div class="mood-current">
+              <div class="mood-big-emoji" id="mood-big-emoji">🙂</div>
+              <div class="mood-big-label" id="mood-big-label">Neutral</div>
+            </div>
+            <div class="mood-stats-grid">
+              <div class="mood-stat-card">
+                <span class="mood-stat-num" id="mood-total-chats">0</span>
+                <span class="mood-stat-label">Total Chats</span>
+              </div>
+              <div class="mood-stat-card">
+                <span class="mood-stat-num" id="mood-affection-big">70</span>
+                <span class="mood-stat-label">Affection</span>
+              </div>
+              <div class="mood-stat-card">
+                <span class="mood-stat-num" id="mood-patience-big">80</span>
+                <span class="mood-stat-label">Patience</span>
+              </div>
+            </div>
+
+            <!-- Personality Settings -->
+            <h3>⚙️ Personality Settings</h3>
+            <div class="personality-settings">
+              <div class="form-row">
+                <label class="form-label">Panggilan untuk kamu:</label>
+                <input
+                  type="text"
+                  id="setting-nickname"
+                  placeholder="Sayang"
+                  class="form-input"
+                  value="Sayang"
+                />
+              </div>
+              <div class="form-row">
+                <label class="form-label">Nama asli kamu:</label>
+                <input
+                  type="text"
+                  id="setting-realname"
+                  placeholder="(opsional)"
+                  class="form-input"
+                />
+              </div>
+              <div class="form-row">
+                <label class="form-label">Nama AI:</label>
+                <input
+                  type="text"
+                  id="setting-ainame"
+                  placeholder="Aria"
+                  class="form-input"
+                  value="Aria"
+                />
+              </div>
+              <div class="form-row">
+                <label class="form-label">Love Language:</label>
+                <select id="setting-lovelang" class="form-select">
+                  <option value="words">💬 Kata-kata manis</option>
+                  <option value="acts">🤲 Tindakan perhatian</option>
+                  <option value="gifts">🎁 Hadiah & surprise</option>
+                  <option value="time">⏰ Quality time</option>
+                  <option value="touch">🤗 Sentuhan (emoji)</option>
+                </select>
+              </div>
+              <button class="add-rule-btn" id="save-personality-btn">
+                💾 Simpan Settings
+              </button>
+            </div>
+
+            <h3>Mood History</h3>
+            <div class="mood-history-list" id="mood-history-list">
+              <p class="empty-state">Loading...</p>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <!-- Alert Sound -->
+    <audio id="alert-sound" preload="auto">
+      <source
+        src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdH2JkZeXk4x/cGRcWF5ncHyGjpOTj4Z8cGZfXGBodH+IkJSUkIiAd29oZGRpcHmBiI2PjouGgHpzb21ucnZ7gIWIiomHhIB8eHZ1dXd5e36BhIaHh4aEgn98e3p6e3x9f4GDhYaGhYOBf316enp7fH5/gYOEhYWEg4F/fXt7e3x9fn+BgoOEhISDgYB+fXx8fH1+f4CBgoODg4KBgH9+fX19fn5/gIGCgoKCgoGAf39+fn5+fn9/gIGBgYGBgYCAf39/f39/f4CAgICAgICAgA=="
+        type="audio/wav"
+      />
+    </audio>
+
+    <script src="/static/js/config.js"></script>
+    <script src="/static/js/state.js"></script>
+    <script src="/static/js/utils.js"></script>
+    <script src="/static/js/chat.js"></script>
+    <script src="/static/js/camera.js"></script>
+    <script src="/static/js/voice.js"></script>
+    <script src="/static/js/handsfree.js"></script>
+    <script src="/static/js/smarthome.js"></script>
+    <script src="/static/js/sensors.js"></script>
+    <script src="/static/js/automation.js"></script>
+    <script src="/static/js/mood.js"></script>
+    <script src="/static/js/features.js"></script>
+    <script src="/static/js/init.js"></script>
+  </body>
+</html>

@@ -1,0 +1,78 @@
+[
+  {
+    "id": "rule_gas_high",
+    "name": "Gas Bocor - Matikan Semua",
+    "condition_type": "sensor_threshold",
+    "sensor": "gas_ppm",
+    "operator": ">",
+    "threshold": 500,
+    "actions": [
+      {
+        "target": "kamar tidur",
+        "state": "off"
+      },
+      {
+        "target": "ruang tamu",
+        "state": "off"
+      },
+      {
+        "target": "kamar mandi",
+        "state": "off"
+      },
+      {
+        "target": "dapur",
+        "state": "off"
+      }
+    ],
+    "enabled": true,
+    "cooldown_minutes": 10,
+    "notify": true,
+    "last_triggered": null,
+    "trigger_count": 0
+  },
+  {
+    "id": "rule_fire_detected",
+    "name": "Api Terdeteksi - Emergency",
+    "condition_type": "sensor_threshold",
+    "sensor": "fire",
+    "operator": "==",
+    "threshold": 1,
+    "actions": [
+      {
+        "target": "kamar tidur",
+        "state": "off"
+      },
+      {
+        "target": "ruang tamu",
+        "state": "off"
+      },
+      {
+        "target": "kamar mandi",
+        "state": "off"
+      },
+      {
+        "target": "dapur",
+        "state": "off"
+      }
+    ],
+    "enabled": true,
+    "cooldown_minutes": 5,
+    "notify": true,
+    "last_triggered": "2026-05-23T02:06:31.387782+00:00",
+    "trigger_count": 13
+  },
+  {
+    "id": "rule_power_high",
+    "name": "Daya Tinggi - Peringatan",
+    "condition_type": "sensor_threshold",
+    "sensor": "power",
+    "operator": ">",
+    "threshold": 1000,
+    "actions": [],
+    "enabled": true,
+    "cooldown_minutes": 15,
+    "notify": true,
+    "last_triggered": null,
+    "trigger_count": 0
+  }
+]

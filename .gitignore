@@ -1,0 +1,76 @@
+# ── Folders to exclude ─────────────────────────────────────────────────────────
+docs/
+firmware copy/
+out/
+
+# ── Python ──────────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.eggs/
+.venv/
+venv/
+env/
+*.egg
+pip-wheel-metadata/
+
+# ── Secrets / credentials ───────────────────────────────────────────────────────
+*.json.key
+*firebase-adminsdk*.json
+ai/smarthome-cfd3f-firebase-adminsdk-fbsvc-61519df010.json
+ai-companion-web/.env
+functions/.env
+.env
+.env.*
+!.env.example
+
+# ── AI models (large binary files) ─────────────────────────────────────────────
+ai/models/*.pkl
+
+# ── Databases ──────────────────────────────────────────────────────────────────
+*.db
+*.sqlite
+*.sqlite3
+
+# ── Logs ───────────────────────────────────────────────────────────────────────
+*.log
+hs_err_pid*.log
+replay_pid*.log
+
+# ── Node.js ────────────────────────────────────────────────────────────────────
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ── Flutter / Dart ─────────────────────────────────────────────────────────────
+flutter/.dart_tool/
+flutter/.flutter-plugins-dependencies
+flutter/.pub-cache/
+flutter/.pub/
+flutter/build/
+flutter/coverage/
+flutter/.idea/
+flutter/android/app/debug
+flutter/android/app/profile
+flutter/android/app/release
+*.class
+*.iml
+*.ipr
+*.iws
+
+# ── PlatformIO / Firmware ──────────────────────────────────────────────────────
+firmware/.pio/
+
+# ── IDE / OS ───────────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
+*.swo

@@ -1,0 +1,31 @@
+# AI Companion Web UI v3
+# Backend: FastAPI + WebSocket
+# Frontend: Vanilla JS (no build step)
+
+# ── Web Framework ──────────────────────────────────────────────────────────────
+fastapi>=0.111.0
+uvicorn[standard]>=0.30.0
+python-multipart>=0.0.9
+jinja2>=3.1.0
+
+# ── Core AI (multi-provider) ───────────────────────────────────────────────────
+openai>=1.30.0               # OpenAI GPT-4o + vision
+anthropic>=0.28.0            # Claude (Anthropic)
+groq>=0.9.0                  # Groq (Llama, Mixtral - super cepat)
+google-generativeai>=0.8.0   # Google Gemini (gratis)
+ollama>=0.3.0                # Ollama (local LLM - gratis, offline)
+
+# ── Computer Vision ────────────────────────────────────────────────────────────
+opencv-python>=4.9.0
+Pillow>=10.0.0
+
+# ── Firebase / Smart Home Control ──────────────────────────────────────────────
+firebase-admin>=6.5.0
+google-cloud-firestore>=2.16.0
+
+# ── Scheduler ──────────────────────────────────────────────────────────────────
+apscheduler>=3.10.0          # Scheduled actions / routines
+
+# ── Utilities ──────────────────────────────────────────────────────────────────
+python-dotenv>=1.0.0
+pydantic>=2.5.0
